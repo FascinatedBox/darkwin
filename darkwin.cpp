@@ -1,47 +1,58 @@
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QWidget>
 
-void usage()
+typedef struct {
+    int x;
+    int y;
+    int width;
+    int height;
+} Options;
+
+#define DEFINE_POSARG(argName, argDesc) \
+parser.addPositionalArgument(argName, \
+    QCoreApplication::translate("main", argDesc));
+
+Options *parseArgs(QApplication *app, int argc, char **argv)
 {
-    fprintf(stderr, "Usage: darkwin x,y widthxheight\n");
-    exit(EXIT_FAILURE);
-}
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Create borderless black window");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    DEFINE_POSARG("x",      "Window x coordinate")
+    DEFINE_POSARG("y",      "Window y coordinate")
+    DEFINE_POSARG("height", "Window height")
+    DEFINE_POSARG("width",  "Window width")
+    parser.process(*app);
 
-void parsePair(char *s, const char *delim, int *left, int *right)
-{
-    QString str = QString(s);
-    QStringList splitStr = str.split(delim);
+    QStringList args = parser.positionalArguments();
+    Options *result = new Options;
+    int i = 0;
 
-    if (splitStr.size() != 2)
-        usage();
+    if (args.size() != 4)
+        parser.showHelp(EXIT_FAILURE);
 
-    bool validLeft, validRight;
+    result->x      = args.at(i).toInt(); i++;
+    result->y      = args.at(i).toInt(); i++;
+    result->height = args.at(i).toInt(); i++;
+    result->width  = args.at(i).toInt(); i++;
 
-    *left = splitStr[0].toInt(&validLeft, 10);
-    *right = splitStr[1].toInt(&validRight, 10);
-
-    if (validLeft == false || validRight == false)
-        usage();
+    return result;
 }
 
 int main(int argc, char **argv)
 {
-    if (argc != 3)
-        usage();
-
-    int x, y;
-    int width, height;
-
-    parsePair(argv[1], ",", &x, &y);
-    parsePair(argv[2], "x", &width, &height);
-
     QApplication app(argc, argv);
+    QCoreApplication::setApplicationName("darkwin");
+    QCoreApplication::setApplicationVersion("1.0");
+
+    Options *o = parseArgs(&app, argc, argv);
     QWidget *w = new QWidget;
 
     w->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint);
     w->setStyleSheet("background-color: #000000");
-    w->move(x, y);
-    w->resize(width, height);
+    w->move(o->x, o->y);
+    w->resize(o->width, o->height);
     w->show();
     app.exec();
 }

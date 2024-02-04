@@ -9,12 +9,19 @@ hint to have it always below other windows.
 
 ### Usage
 
-Darkwin expects two arguments: A screen position and a size. The first is given
-as `x`,`y` and the second is `width`x`height`. 
-
 ```
-    # Create a window at x 0, y 389 that's 1280x720 in size.
-    darkwin 0,389 1280x720
+Create borderless black window
+
+Options:
+  -h, --help     Displays help on commandline options.
+  --help-all     Displays help including Qt specific options.
+  -v, --version  Displays version information.
+
+Arguments:
+  x              Window x coordinate
+  y              Window y coordinate
+  height         Window height
+  width          Window width
 ```
 
 ### Why
