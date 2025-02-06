@@ -10,12 +10,13 @@ hint to have it always below other windows.
 ### Usage
 
 ```
-Create borderless black window
+Create borderless window
 
 Options:
   -h, --help     Displays help on commandline options.
   --help-all     Displays help including Qt specific options.
   -v, --version  Displays version information.
+  -c <color>     hex color (RRGGBB) (default: 000000)
 
 Arguments:
   x              Window x coordinate
