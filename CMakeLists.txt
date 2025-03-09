@@ -1,8 +1,8 @@
-project(darkwin)
 cmake_minimum_required(VERSION 3.5.0)
+project(darkwin)
 
 find_package(
-    Qt5
+    Qt6
     COMPONENTS
         Widgets
     REQUIRED
@@ -25,7 +25,7 @@ set_target_properties(
 
 target_link_libraries(
     darkwin
-        Qt5::Widgets
+        Qt6::Widgets
 )
 
 install(
